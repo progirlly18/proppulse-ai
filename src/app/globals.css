@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * PropPulse design tokens. Warm paper background, deep ink text, one
+ * restrained green accent; tier colours are muted so "hot" reads as
+ * important, not alarming. Change the brand here.
+ */
+@theme {
+  --color-paper: #f6f3ec;
+  --color-surface: #fffdf8;
+  --color-sunken: #efebe1;
+  --color-line: #e3ddd0;
+  --color-line-strong: #cfc7b6;
+  --color-ink: #0f1b2d;
+  --color-ink-2: #34404f;
+  --color-muted: #6b6758;
+  --color-faint: #8e8a7c;
+
+  --color-accent: #1d6b47;
+  --color-accent-strong: #145236;
+  --color-accent-soft: #e1eee5;
+
+  --color-hot: #a8442b;
+  --color-hot-soft: #f6e3dc;
+  --color-warm: #9a6410;
+  --color-warm-soft: #f5ead3;
+  --color-cold: #4a5d74;
+  --color-cold-soft: #e5e9ef;
+  --color-danger: #b42318;
+  --color-danger-soft: #fbe7e5;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  --shadow-card: 0 1px 0 rgb(15 27 45 / 0.03), 0 1px 3px rgb(15 27 45 / 0.06);
+  --shadow-pop: 0 12px 32px -8px rgb(15 27 45 / 0.18), 0 2px 6px rgb(15 27 45 / 0.06);
+
+  --animate-fade-in: fade-in 180ms ease-out;
+  --animate-shimmer: shimmer 1.4s linear infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  background: var(--color-paper);
+  color: var(--color-ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-sunken) 25%, #f7f4ed 37%, var(--color-sunken) 63%);
+  background-size: 400% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: 6px;
+}
+
+.scroll-thin { scrollbar-width: thin; scrollbar-color: var(--color-line-strong) transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
