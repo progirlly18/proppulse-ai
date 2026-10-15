@@ -193,6 +193,7 @@ tests/                       Vitest suites
 ## AI usage disclosure
 
 - **Claude (Anthropic), via Claude Code**: used as an autonomous pair-programmer for the whole build. It read the assignment brief, proposed the architecture, and wrote the code (UI, API routes, prompts, scoring, tests), ran lint/type-check/tests/builds and a Playwright browser walkthrough, fixed the issues those found, and drafted this README and the demo script. It also wrote `scripts/verify-live.mjs` and pushed the code to GitHub.
+- **ChatGPT (OpenAI)**: Used for development guidance, clarifying technical concepts, troubleshooting.
 - **What I did myself:** set the product requirements and scope (including the Follow-up Copilot and the design direction), created the GitHub repository, deployed to Vercel with my Gemini key, tested the deployed application, ran the live verification script, and reviewed the project documentation and key implementation decisions in preparation for the technical interview.
 - **Google Gemini** (`gemini-flash-latest`): the runtime model inside the product (lead analysis, chat, follow-up drafts). It was not used to write code.
 - No other AI tools were used.
