@@ -4,8 +4,8 @@
 
 Built for the Masal AI Forward Deployed Engineer assignment (Round 2).
 
-- **Live app:** _added after deployment_
-- **Demo video:** _added after recording_
+- **Live app:** https://proppulse-ai-three.vercel.app (no login, no setup)
+- **Demo video:** _link to be added_
 
 > Sample leads in the app are fictional and marked **Sample**. They ship without any analysis: every analysis you see was produced live by Gemini when someone clicked **Analyze**.
 
@@ -123,7 +123,17 @@ npm run build
 - `tests/prompts.test.ts`: untrusted-message fencing, grounding, outcome carried into drafts.
 - `tests/api.test.ts`: the real route handlers with the Gemini SDK mocked: input rejection, server-side scoring, the repair-once loop, failing loudly on invalid output, 429 mapping, missing key, rate limiting, and that chat receives only the selected lead.
 
-A browser walkthrough (Playwright, 32 checks) covered the UI flows: analyze-all, error + retry, every analysis section, stated/inferred tags, draft + complete + reschedule, per-lead chat isolation, form validation, persistence across refresh, overdue detection, mobile layout. Real Gemini output was then checked on the deployed URL.
+A browser walkthrough (Playwright, 32 checks) covered the UI flows: analyze-all, error + retry, every analysis section, stated/inferred tags, draft + complete + reschedule, per-lead chat isolation, form validation, persistence across refresh, overdue detection, mobile layout. It ran with the AI endpoints intercepted, so it proves the UI wiring, not the model.
+
+### Verifying real Gemini output on a deployment
+
+```bash
+node scripts/verify-live.mjs https://proppulse-ai-three.vercel.app
+```
+
+The script (Node 18+, no dependencies) makes four real model calls. It invents a random code word, puts it in a lead's customer message, and checks that the chat answer repeats it back. A canned or hardcoded response can't know a word made up seconds earlier, so a pass means the deployed app is calling Gemini with that lead's context. It also checks input validation, that every analysis field is present, and that a follow-up draft is generated.
+
+**Result on the live deployment (15 Oct 2026, run from a Windows machine): all checks passed.** Health reported `aiConfigured: true` with `gemini-flash-latest`; invalid input was rejected with HTTP 400 before any AI call; analysis returned HTTP 200 with every required field and correctly extracted the lead's parking concern; the chat reproduced that run's canary word (`Zorbex-4237`); and the Follow-up Copilot generated a personalised message.
 
 ## Deploy (Vercel, free tier)
 
@@ -182,6 +192,7 @@ tests/                       Vitest suites
 
 ## AI usage disclosure
 
-- **Claude (Anthropic), via Claude Code**: used as an autonomous pair-programmer for the whole build. It read the assignment brief, proposed the architecture, and wrote the code (UI, API routes, prompts, scoring, tests), ran lint/type-check/tests/builds and a Playwright browser walkthrough, fixed the issues those found, and drafted this README and the demo script. I directed the product scope (Follow-up Copilot, scoring philosophy, design direction), reviewed the code and can explain every part.
+- **Claude (Anthropic), via Claude Code**: used as an autonomous pair-programmer for the whole build. It read the assignment brief, proposed the architecture, and wrote the code (UI, API routes, prompts, scoring, tests), ran lint/type-check/tests/builds and a Playwright browser walkthrough, fixed the issues those found, and drafted this README and the demo script. It also wrote `scripts/verify-live.mjs` and pushed the code to GitHub.
+- **What I did myself:** set the product requirements and scope (including the Follow-up Copilot and the design direction), created the GitHub repository, deployed to Vercel with my Gemini key, tested the deployed application, ran the live verification script, and reviewed the project documentation and key implementation decisions in preparation for the technical interview.
 - **Google Gemini** (`gemini-flash-latest`): the runtime model inside the product (lead analysis, chat, follow-up drafts). It was not used to write code.
 - No other AI tools were used.
